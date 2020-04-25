@@ -14,7 +14,6 @@ class Badge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return Stack(
       alignment: Alignment.center,
       children: [
@@ -27,7 +26,7 @@ class Badge extends StatelessWidget {
             // color: Theme.of(context).accentColor,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10.0),
-              color: color != null ? color : theme.accentColor,
+              color: color != null ? color : Theme.of(context).accentColor,
             ),
             constraints: BoxConstraints(
               minWidth: 16,
