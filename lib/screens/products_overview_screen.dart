@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../widgets/app_drawer.dart';
 import '../widgets/products_grid.dart';
 import '../widgets/badge.dart';
 import '../providers/cart.dart';
 import './cart_screen.dart';
-import 'package:provider_project/providers/products.dart';
+import '../providers/products.dart';
 
 enum FilterOptions {
   Favorites,
@@ -24,14 +25,10 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
 
   @override
   void initState() {
-    // Provider.of<Products>(context).fetchProduct();                      //This will no work until we do listen:false
-    //context didn't work initState();
-
-    //Another Approach
+    // Provider.of<Products>(context).fetchAndSetProducts(); // WON'T WORK!
     // Future.delayed(Duration.zero).then((_) {
-    //   Provider.of<Products>(context).fetchProduct();
+    //   Provider.of<Products>(context).fetchAndSetProducts();
     // });
-
     super.initState();
   }
 
@@ -41,7 +38,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
       setState(() {
         _isLoading = true;
       });
-      Provider.of<Products>(context).fetchProduct().then((_) {
+      Provider.of<Products>(context).fetchAndSetProducts().then((_) {
         setState(() {
           _isLoading = false;
         });
@@ -85,7 +82,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
             Consumer<Cart>(
               builder: (_, cart, ch) => Badge(
                 child: ch,
-                value: cart.totalItem.toString(),
+                value: cart.itemCount.toString(),
               ),
               child: IconButton(
                 icon: Icon(
@@ -101,10 +98,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
         drawer: AppDrawer(),
         body: _isLoading
             ? Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: CircularProgressIndicator(),
-                ),
+                child: CircularProgressIndicator(),
               )
             : ProductsGrid(_showOnlyFavorites),
       ),
